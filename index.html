@@ -67,9 +67,15 @@ mkdir -p "$INSTALL_DIR"
 
 TARGET_PATH="${INSTALL_DIR}/${BINARY_NAME}"
 
+if [ -f "$TARGET_PATH" ]; then
+    ACTION="Updating"
+else
+    ACTION="Installing"
+fi
+
 echo ""
-echo "Downloading ${BINARY_ID}"
-echo "Installing to ${TARGET_PATH}"
+echo "${ACTION} ${BINARY_ID}"
+echo "Target ${TARGET_PATH}"
 
 if command -v curl >/dev/null 2>&1; then
     curl -fsSL "$DOWNLOAD_URL" -o "$TARGET_PATH"
@@ -82,7 +88,14 @@ fi
 
 chmod +x "$TARGET_PATH"
 
-if [ "$ADD_TO_PATH" = true ]; then
+PROFILE=""
+PATH_ALREADY_WORKS=false
+
+if command -v "$BINARY_NAME" >/dev/null 2>&1; then
+    PATH_ALREADY_WORKS=true
+fi
+
+if [ "$ADD_TO_PATH" = true ] && [ "$PATH_ALREADY_WORKS" = false ]; then
     case ":$PATH:" in
         *":$INSTALL_DIR:"*)
             ;;
@@ -114,7 +127,7 @@ fi
 
 echo ""
 
-if [ "$ADD_TO_PATH" = true ]; then
+if [ "$ADD_TO_PATH" = true ] && [ "$PATH_ALREADY_WORKS" = false ] && [ -n "$PROFILE" ]; then
     cat <<EOF
 Installed ltz successfully
 
@@ -126,6 +139,9 @@ Then just run:
 EOF
 else
     cat <<EOF
-Installed ltz successfully to $TARGET_PATH
+Installed ltz successfully
+
+Run:
+    ltz
 EOF
 fi
