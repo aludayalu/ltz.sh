@@ -134,14 +134,12 @@ Installed ltz successfully
 To add ltz to path use:
     source "$PROFILE"
 
-Then just run:
-    ltz
+Then just run ltz
 EOF
 else
     cat <<EOF
 Installed ltz successfully
 
-Run:
-    ltz
+Run ltz
 EOF
 fi
