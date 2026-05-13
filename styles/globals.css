@@ -155,5 +155,5 @@ body {
 }
 
 .fade-in {
-    animation: fadeInScale 840ms ease-out forwards;
+    animation: fadeInScale 400ms ease-out forwards;
 }
