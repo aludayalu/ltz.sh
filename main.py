@@ -8,7 +8,11 @@ def catch_all(any_route):
     is_curl = request.headers.get("User-Agent", "").startswith("curl/")
 
     if is_curl:
-        return send_file("ltzInstallOrUpdate.sh")
+        if any_route == "":
+            return send_file("ltzInstallOrUpdate.sh")
+        else:
+            return send_from_directory("out", any_route)
+    
 
     return send_from_directory("out", any_route)
 
