@@ -1,0 +1,128 @@
+#!/usr/bin/env bash
+
+cat <<EOF
+ _   _____ _____
+| | |_   _|__  /
+| |   | |   / /
+| |___| |  / /_
+|_____|_| /____|
+EOF
+
+cat <<EOF
+
+Software made by Lumatozer
+
+EOF
+
+set -euo pipefail
+
+BASE_URL="https://ltz.sh/bin"
+ADD_TO_PATH=true
+
+for arg in "$@"; do
+    case "$arg" in
+        --no-path)
+            ADD_TO_PATH=false
+            ;;
+        *)
+            echo "Unknown argument: $arg"
+            exit 1
+            ;;
+    esac
+done
+
+OS="$(uname -s)"
+ARCH="$(uname -m)"
+
+case "$OS" in
+    Linux)
+        GOOS="linux"
+        INSTALL_DIR="$HOME/.local/bin"
+        ;;
+    Darwin)
+        GOOS="darwin"
+        INSTALL_DIR="$HOME/.local/bin"
+        ;;
+    *)
+        echo "Unsupported OS: $OS"
+        exit 1
+        ;;
+esac
+
+case "$ARCH" in
+    x86_64|amd64)
+        GOARCH="amd64"
+        ;;
+    arm64|aarch64)
+        GOARCH="arm64"
+        ;;
+    *)
+        echo "Unsupported architecture: $ARCH"
+        exit 1
+        ;;
+esac
+
+BINARY_ID="${GOOS}-${GOARCH}"
+BINARY_NAME="ltz"
+
+DOWNLOAD_URL="${BASE_URL}/${BINARY_ID}"
+
+mkdir -p "$INSTALL_DIR"
+
+TARGET_PATH="${INSTALL_DIR}/${BINARY_NAME}"
+
+echo "Downloading binary ${BINARY_ID}"
+echo "Installing to ${TARGET_PATH}"
+
+if command -v curl >/dev/null 2>&1; then
+    curl -fsSL "$DOWNLOAD_URL" -o "$TARGET_PATH"
+elif command -v wget >/dev/null 2>&1; then
+    wget -qO "$TARGET_PATH" "$DOWNLOAD_URL"
+else
+    echo "curl or wget is required"
+    exit 1
+fi
+
+chmod +x "$TARGET_PATH"
+
+if [ "$ADD_TO_PATH" = true ]; then
+    case ":$PATH:" in
+        *":$INSTALL_DIR:"*)
+            ;;
+        *)
+            SHELL_NAME="$(basename "${SHELL:-}")"
+
+            case "$SHELL_NAME" in
+                zsh)
+                    PROFILE="$HOME/.zshrc"
+                    ;;
+                bash)
+                    PROFILE="$HOME/.bashrc"
+                    ;;
+                fish)
+                    PROFILE="$HOME/.config/fish/config.fish"
+                    ;;
+                *)
+                    PROFILE="$HOME/.profile"
+                    ;;
+            esac
+
+            cat <<EOF >> "$PROFILE"
+
+export PATH="$INSTALL_DIR:\$PATH"
+EOF
+
+            export PATH="$INSTALL_DIR:$PATH"
+
+            echo "Added $INSTALL_DIR to PATH in $PROFILE"
+            ;;
+    esac
+fi
+
+cat <<EOF
+
+Installed ltz successfully
+
+Run:
+    $BINARY_NAME
+EOF
