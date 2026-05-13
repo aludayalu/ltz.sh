@@ -2,7 +2,7 @@ from flask import Flask, request, send_from_directory, send_file
 
 app = Flask(__name__)
 
-@app.get("/", defaults={"any_route": "index.html"})
+@app.get("/", defaults={"any_route": ""})
 @app.get("/<path:any_route>")
 def catch_all(any_route):
     is_curl = request.headers.get("User-Agent", "").startswith("curl/")
