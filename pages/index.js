@@ -6,8 +6,8 @@ export default function Home() {
         <>
         <div style={{ width: '100svw', height: '100svh', position: 'absolute', zIndex: -1 }}>
             <MagicRings
-                color="#A855F7"
-                colorTwo="#6366F1"
+                color="#dc42ce"
+                colorTwo="#f17051"
                 ringCount={6}
                 speed={1}
                 attenuation={10}
@@ -34,9 +34,9 @@ export default function Home() {
             <div className="flex justify-center items-center">
                 <img src="logo.svg" style={{width: "14svw"}} draggable={false}></img>
             </div>
-            <div className="mt-3" style={{fontSize: "20px"}}>The work suite made for efficiency.</div>
+            <div className="mt-3" style={{fontSize: "20px", color: "white"}}>The work suite made for efficiency.</div>
             <div className="flex justify-center items-center mt-2 gap-2">
-                <div className="text-md font-bold py-[0.5vh] px-[0.7vw]" style={{fontFamily: "monospace", backgroundColor: "rgba(255, 255, 255, 0.1)", borderRadius: "8px", border: "1px solid rgba(255, 255, 255, 0.14)", width: "fit-content", fontSize: "14.5px"}}>
+                <div className="text-md font-bold py-[0.5vh] px-[0.7vw]" style={{fontFamily: "monospace", backgroundColor: "rgba(255, 255, 255, 0.1)", borderRadius: "8px", border: "1px solid rgba(255, 255, 255, 0.14)", width: "fit-content", fontSize: "14.5px", color: "white"}}>
                     curl ltz.sh | bash
                 </div>
                 <ClipboardCheckIcon size={24} onClick={() => {
