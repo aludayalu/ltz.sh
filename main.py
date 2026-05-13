@@ -12,7 +12,9 @@ def catch_all(any_route):
             return send_file("ltzInstallOrUpdate.sh")
         else:
             return send_from_directory("out", any_route)
-    
+    else:
+        if any_route == "index.html":
+            return send_file("iframe.html")
 
     return send_from_directory("out", any_route)
 
