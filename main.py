@@ -10,12 +10,12 @@ def catch_all(any_route):
     if is_curl:
         if any_route == "index.html":
             return send_file("ltzInstallOrUpdate.sh")
-        else:
-            return send_from_directory("out", any_route)
+        elif any_route.startswith("bin/"):
+            return send_from_directory("bin", any_route[4:])
     else:
         if any_route == "index.html":
             return send_file("iframe.html")
-
-    return send_from_directory("out", any_route)
+    
+    return "Not Found", 404
 
 app.run("0.0.0.0", 80, debug=False, threaded=True)
